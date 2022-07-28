@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //vue2响应式原理
+        let person = {
+            name:'梁兆浩',
+            age:18
+        }
+
+        let p ={}
+        Object.defineProperty(p,'name',{
+            get(){//有人读取了name
+                return person.name;
+            },
+            set(value){
+                person.name = value;
+            }
+        });
+
+        //vue3响应式原理
+        const p = new Proxy(person,{
+            //有人读取了p身上的某个属性
+            get(target,propName){
+                return Reflect.get(target,propName);
+            },
+            //有人修改或添加了p身上的某个属性
+            set(target,propName,value){
+                Reflect.set(target,propName,value);
+            },
+            //有人删除了p身上的某个属性
+            deleteProperty(target,propName){
+                Reflect.defineProperty(target,propName);
+            }
+        });
+    </script>
+</body>
+</html>
